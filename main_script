@@ -1,0 +1,118 @@
+df["Âge"].hist(bins=10)
+df["Sexe"].value_counts().plot(kind="bar")
+
+df["Ville"].value_counts().plot(kind="bar")
+
+# Charger le fichier CSV
+df = pd.read_csv(r"C:\Users\lenovo\Downloads\supermarche_clients.csv")
+
+# 📊 Graphique du panier moyen par sexe
+plt.figure(figsize=(10, 5))
+sns.barplot(x=df.groupby("Sexe")["Panier moyen (€)"].mean().index, 
+            y=df.groupby("Sexe")["Panier moyen (€)"].mean().values, 
+            palette="viridis")
+plt.xlabel("Sexe")
+plt.ylabel("Panier moyen (€)")
+plt.title("Panier moyen par sexe")
+plt.show()
+
+# 📊 Graphique du panier moyen par ville
+plt.figure(figsize=(12, 6))
+sns.barplot(x=df.groupby("Ville")["Panier moyen (€)"].mean().index, 
+            y=df.groupby("Ville")["Panier moyen (€)"].mean().values, 
+            palette="coolwarm")
+plt.xlabel("Ville")
+plt.ylabel("Panier moyen (€)")
+plt.title("Panier moyen par ville")
+plt.xticks(rotation=45)
+plt.show()
+
+
+# 📊 Graphique du panier moyen par sexe
+plt.figure(figsize=(10, 5))
+sns.barplot(x=df.groupby("Sexe")["Panier moyen (€)"].mean().index, 
+            y=df.groupby("Sexe")["Panier moyen (€)"].mean().values, 
+            palette="viridis")
+plt.xlabel("Sexe")
+plt.ylabel("Panier moyen (€)")
+plt.title("Panier moyen par sexe")
+plt.show()
+
+# 📊 Graphique du panier moyen par ville
+plt.figure(figsize=(12, 6))
+sns.barplot(x=df.groupby("Ville")["Panier moyen (€)"].mean().index, 
+            y=df.groupby("Ville")["Panier moyen (€)"].mean().values, 
+            palette="coolwarm")
+plt.xlabel("Ville")
+plt.ylabel("Panier moyen (€)")
+plt.title("Panier moyen par ville")
+plt.xticks(rotation=45)
+plt.show()
+
+# Déterminer les moyens de paiement préférés des clients
+paiement_counts = df["Moyen de paiement préféré"].value_counts().reset_index()
+paiement_counts.columns = ["Moyen de paiement préféré", "Nombre de clients"]
+
+# 📊 Affichage du graphique en barres
+plt.figure(figsize=(8, 5))
+sns.barplot(
+    data=paiement_counts, 
+    x="Moyen de paiement préféré", 
+    y="Nombre de clients", 
+    hue="Moyen de paiement préféré",  # Ajout de hue pour éviter le warning
+    palette="viridis", 
+    legend=False  # Suppression de la légende inutile
+)
+
+plt.xlabel("Moyen de paiement préféré")
+plt.ylabel("Nombre de clients")
+plt.title("Répartition des moyens de paiement préférés")
+plt.xticks(rotation=45)  # Rotation pour meilleure lisibilité
+plt.show()
+
+# Création des segments de dépenses
+df["Segment"] = pd.qcut(df["Total dépensé (€)"], q=4, labels=["Faible", "Moyen", "Élevé", "Très élevé"])
+
+# Compter les occurrences de chaque segment
+segment_counts = df["Segment"].value_counts().reset_index()
+segment_counts.columns = ["Segment", "Nombre de clients"]
+
+# 📊 Affichage du graphique en barres
+plt.figure(figsize=(8, 5))
+sns.barplot(
+    data=segment_counts, 
+    x="Segment", 
+    y="Nombre de clients", 
+    hue="Segment",  # Ajout de hue pour éviter le warning
+    palette="viridis", 
+    legend=False  # Suppression de la légende inutile
+)
+
+plt.xlabel("Segment de dépenses")
+plt.ylabel("Nombre de clients")
+plt.title("Répartition des clients par segment de dépenses")
+plt.xticks(rotation=45)  # Rotation pour meilleure lisibilité
+plt.show()
+
+
+# 📊 Nuage de points : Âge vs Total dépensé (€)
+plt.figure(figsize=(8, 5))
+
+# Création du scatter plot avec Seaborn
+scatter = sns.scatterplot(
+    data=df, 
+    x="Âge", 
+    y="Total dépensé (€)", 
+    hue="Score de fidélité",  # La couleur représente le score de fidélité
+    palette="viridis", 
+    alpha=0.7  # Ajout de transparence pour éviter la surcharge de points
+)
+
+# Placer la légende en dehors du graphique
+plt.legend(title="Score de fidélité", bbox_to_anchor=(1.05, 1), loc="upper left")
+
+plt.xlabel("Âge des clients")
+plt.ylabel("Total dépensé (€)")
+plt.title("Relation entre l'âge et le total dépensé")
+plt.grid(True)  # Ajout d'une grille pour améliorer la lecture
+plt.show()
